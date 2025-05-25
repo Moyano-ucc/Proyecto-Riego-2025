@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monitoreo de Humedad - Flores</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(to bottom, #e0f7fa, #ffffff);
+      margin: 0;
+      padding: 0;
+      color: #333;
+      /* Imagen de fondo */
+      background-image: url('https://i.pinimg.com/736x/4b/9d/66/4b9d663c24ef915fc839d1e115f78577.jpg');
+      background-position: right; 
+      background-repeat: no-repeat;
+      background-size: cover; 
+      height: 100vh;              
+    }
+
+    header {
+      background-color: #2e7d32;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      color: white;
+      font-size: 2.2rem;
+    }
+
+    .importancia {
+      background-color: #d0f0e8;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 3px solid #00796b;
+      max-width: 800px;
+      margin: 20px auto;
+      border-radius: 10px;
+    }
+    .importancia p {
+      font-size: 17px;
+      line-height: 1.6;
+      color: #333;
+      margin: 0 0 20px 0;
+    }
+    .boton-formulario,
+    button.registrar,
+    button.regresar {
+      display: inline-block;
+      background: linear-gradient(135deg, #4caf50, #087f23);
+      color: white;
+      padding: 14px 28px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(72, 180, 97, 0.4);
+      transition: all 0.3s ease;
+      margin: 8px 10px 0 0;
+      text-align: center;
+      user-select: none;
+    }
+    
+    .boton-formulario:hover,
+    button.registrar:hover,
+    button.regresar:hover {
+      background: linear-gradient(135deg, #087f23, #4caf50);
+      box-shadow: 0 12px 20px rgba(72, 180, 97, 0.6);
+      transform: translateY(-3px);
+    }
+    
+    .boton-formulario:active,
+    button.registrar:active,
+    button.regresar:active {
+      transform: translateY(1px);
+      box-shadow: 0 6px 10px rgba(72, 180, 97, 0.3);
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 30px auto 60px auto;
+      background-color: #ffffff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: none;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #00796b;
+    }
+
+    select, input[type="number"], input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #b2dfdb;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    .info, .humedad, .motor, .mensaje, .recomendacion {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    .bien {
+      color: green;
+    }
+
+    .seco {
+      color: red;
+    }
+
+    .estadoMotorOn {
+      color: green;
+    }
+
+    .estadoMotorOff {
+      color: red;
+    }
+
+    .mensaje, .recomendacion {
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    #introduccion, #contenido {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 15px;
+    }
+
+    #contenido {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Monitoreo Inteligente de Humedad</h1>
+  </header>
+
+  <section class="importancia" id="introduccion">
+    <h2>🌱 ¿Por qué es importante cuidar las plantas?</h2>
+    <p>
+      Las plantas no solo embellecen nuestros espacios, sino que también purifican el aire, regulan la temperatura y fomentan un ambiente saludable. Sin embargo, su bienestar depende de factores clave como el nivel de humedad en el suelo.
+      <br><br>
+      🌿 Monitorear la humedad de forma inteligente nos permite brindar el cuidado adecuado a cada especie, optimizando el uso del agua y evitando enfermedades. Este sistema ayuda a detectar cuándo una planta necesita ser regada, promoviendo un crecimiento saludable y sostenible. 🌸
+    </p>
+    <button class="boton-formulario" onclick="mostrarFormulario()">Ir al formulario</button>
+  </section>
+
+  <section id="contenido" style="max-width:800px; margin:auto; padding: 0 15px 40px 15px;">
+    <h2>¿Qué hace este sistema?</h2>
+    <p>Este sistema detecta automáticamente el nivel de humedad del suelo y determina si es necesario regar la planta. Usa sensores que recogen datos en tiempo real, ayudando a mantener un entorno ideal para el crecimiento de las plantas.</p>
+
+    <h2>¿Por qué es útil?</h2>
+    <p>Evita el riego excesivo o insuficiente, ahorra agua, cuida el medio ambiente y es ideal para personas que no pueden estar pendientes del cuidado diario de sus plantas.</p>
+  </section>
+
+  <!-- Contenedor con formulario y monitoreo -->
+  <div class="container" id="formulario">
+    <form id="formFlor">
+      <label for="flor">Selecciona una flor</label>
+      <select id="flor" required>
+        <option value="">-- Elegir --</option>
+        <option value="san_joaquin">San Joaquín</option>
+        <option value="flor_azucar">Flor de Azúcar</option>
+        <option value="cayena">Cayena</option>
+        <option value="geranios">Geranios</option>
+        <option value="heliconia">Heliconia</option>
+        <option value="begonia">Begoña</option>
+        <option value="zapatos_fraile">Zapatos de Fraile</option>
+        <option value="rosa_concepcion">Rosa de Concepción</option>
+        <option value="orquidea">Orquídea</option>
+        <option value="caballero_noche">Caballero de Noche</option>
+      </select>
+
+      <label for="edad">Edad aproximada (meses)</label>
+      <input type="number" id="edad" min="0" required>
+
+      <label for="colorHojas">Color de las hojas</label>
+      <select id="colorHojas" required>
+        <option value="">-- Elegir --</option>
+        <option value="verde">Verde</option>
+        <option value="amarilla">Amarilla</option>
+        <option value="marron">Marrón</option>
+        <option value="palida">Pálida</option>
+        <option value="manchada">Manchada</option>
+      </select>
+
+      <button type="button" class="registrar" onclick="registrarFlor()">Registrar Flor</button>
+
+      <button type="button" class="regresar" onclick="regresarContenido()">
+        Regresar
+      </button>
+    </form>
+
+    <div id="infoFlor" class="info"></div>
+    <div id="humedadTexto" class="humedad"></div>
+    <div id="motorTexto" class="motor"></div>
+    <div id="mensajeHumedad" class="mensaje"></div>
+    <div id="recomendacion" class="recomendacion"></div>
+  </div>
+
+  <script>
+
+    function mostrarFormulario() {
+      // Oculta secciones de introducción y contenido
+      document.getElementById('introduccion').style.display = 'none';
+      document.getElementById('contenido').style.display = 'none';
+
+      // Muestra el formulario
+      document.getElementById('formulario').style.display = 'block';
+
+      // Desplaza hasta el formulario
+      document.getElementById('formulario').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function regresarContenido() {
+      document.getElementById('formulario').style.display = 'none';
+      document.getElementById('introduccion').style.display = 'block';
+      document.getElementById('contenido').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    let intervalo;
+
+    function registrarFlor() {
+      const flor = document.getElementById('flor').value;
+      const edad = parseInt(document.getElementById('edad').value);
+      const color = document.getElementById('colorHojas').value;
+
+      if (!flor || isNaN(edad) || !color) {
+        alert("Por favor completa todos los campos.");
+        return;
+      }
+
+      const nombreFlor = document.getElementById('flor').selectedOptions[0].text;
+      document.getElementById('infoFlor').innerHTML = `🌸 Flor: <strong>${nombreFlor}</strong><br>Edad: ${edad} meses<br>Color de hojas: ${color}`;
+
+      // Limpiar estados anteriores
+      document.getElementById('humedadTexto').innerText = '';
+      document.getElementById('motorTexto').innerText = '';
+      document.getElementById('mensajeHumedad').innerText = '';
+      document.getElementById('recomendacion').innerText = '';
+
+      // Detener intervalo previo si existe
+      if (intervalo) {
+        clearInterval(intervalo);
+      }
+
+      // Iniciar nuevo intervalo con los datos actuales
+      intervalo = setInterval(() => actualizarEstado(flor, edad, color), 5000);
+
+      // Actualizar estado inicial de inmediato
+      actualizarEstado(flor, edad, color);
+    }
+
+    function actualizarEstado(flor, edad, color) {
+      fetch('/humedad')
+        .then(response => response.json())
+        .then(data => {
+          const humedad = data.valor;
+          const motorPrendido = humedad < 30;
+
+          document.getElementById('humedadTexto').innerText = `💧 Humedad: ${humedad.toFixed(3)}%`;
+
+          const mensaje = document.getElementById('mensajeHumedad');
+          if (humedad < 30) {
+            mensaje.innerText = "⚠️ La humedad está muy baja. ¡Tu planta necesita agua!";
+            mensaje.className = "mensaje seco";
+          } else {
+            mensaje.innerText = "✅ La humedad es adecuada. ¡Tu planta está bien!";
+            mensaje.className = "mensaje bien";
+          }
+
+          document.getElementById('motorTexto').innerHTML =
+            `🔌 Motor: <span class="${motorPrendido ? 'estadoMotorOn' : 'estadoMotorOff'}">${motorPrendido ? 'Prendido' : 'Apagado'}</span>`;
+
+          mostrarRecomendacion(flor, humedad, edad, color);
+        })
+        .catch(error => {
+          console.error('Error al obtener la humedad:', error);
+        });
+    }
+
+    function mostrarRecomendacion(flor, humedad, edad, color) {
+      let recomendacion = "";
+
+      switch (flor) {
+        case "san_joaquin":
+          recomendacion = "🌿 San Joaquín: Necesita riego constante y luz indirecta. ";
+          break;
+        case "flor_azucar":
+          recomendacion = "🌸 Flor de Azúcar: Prefiere ambientes húmedos y poco sol directo. ";
+          break;
+        case "cayena":
+          recomendacion = "🌺 Cayena: Requiere mucha luz y riego moderado. ";
+          break;
+        case "geranios":
+          recomendacion = "🌼 Geranios: Agradecen el sol pero no el exceso de agua. ";
+          break;
+        case "heliconia":
+          recomendacion = "🍃 Heliconia: Le gusta el clima tropical y la tierra bien drenada. ";
+          break;
+        case "begonia":
+          recomendacion = "🌱 Begoña: Prefiere sombra parcial y humedad controlada. ";
+          break;
+        case "zapatos_fraile":
+          recomendacion = "👞 Zapatos de Fraile: Necesita humedad moderada y sombra. ";
+          break;
+        case "rosa_concepcion":
+          recomendacion = "🌹 Rosa de Concepción: Requiere sol matutino y suelo fértil. ";
+          break;
+        case "orquidea":
+          recomendacion = "🌸 Orquídea: Requiere alta humedad y sombra parcial.";
+          break;
+        case "caballero_noche":
+          recomendacion = "🌙 Caballero de Noche: Necesita riego moderado y es ideal para lugares con poca luz.";
+          break;
+      }
+
+      // Ajustes por humedad
+      if (humedad < 30) {
+        recomendacion += "💧 Humedad baja: aumenta la frecuencia de riego.";
+      } else {
+        recomendacion += "✅ Humedad ideal: mantén el riego actual.";
+      }
+
+      // Ajustes por edad
+      if (edad < 6) {
+        recomendacion += " 🌱 Es una flor joven, evita el exceso de agua.";
+      } else if (edad < 24) {
+        recomendacion += " 🌼 Está en etapa adulta, ideal para floración.";
+      } else {
+        recomendacion += " 🍂 Planta madura, revisa raíces y fertilización.";
+      }
+
+      // Ajustes por color de hojas
+      switch (color) {
+        case "verde":
+          recomendacion += " ✅ Hojas verdes indican buena salud.";
+          break;
+        case "amarilla":
+          recomendacion += " ⚠️ Hojas amarillas: posible exceso de agua o falta de nitrógeno.";
+          break;
+        case "marron":
+          recomendacion += " 🚨 Hojas marrones: puede haber quemaduras solares o raíces afectadas.";
+          break;
+        case "palida":
+          recomendacion += " ⚠️ Hojas pálidas: verifica nutrientes y exposición solar.";
+          break;
+        case "manchada":
+          recomendacion += " ⚠️ Hojas manchadas: posible presencia de hongos o plagas.";
+          break;
+      }
+
+      document.getElementById('recomendacion').innerText = recomendacion;
+    }
+  </script>
+
+</body>
+</html>
